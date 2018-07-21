@@ -53,3 +53,17 @@ from the root directory.
 ## Bugs
 
 + No known bugs at this time.
+
+## Additional Authors
+
+In addition to the initial authors shown in the AUTHORS file, subsequent authors are listed below.
+
+* [**Alex Allen**](https://github.com/sanjurosaves)
+* [**Artur Adamian**](https://github.com/arturadamian)
+
+<br><br>
+<p align="center">
+
+<a href="https://www.holbertonschool.com"><img src="https://intranet.hbtn.io/assets/holberton-logo-simplified-d4e8a1e8bf5ad93c8c3ce32895b4b53749b477b7ba7342d7f064e6883bcd3be2.png"></a>
+
+</p>
