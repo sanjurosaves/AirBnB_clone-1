@@ -59,12 +59,8 @@ class HBNBCommand(cmd.Cmd):
                 print("** class doesn't exist **")
                 return
             for param in split_args:
-               if (param is not split_args[0]):
-                   HBNBCommand.handle_param(param, split_args[0], inst.id)
-            # count arguments (use argc?)
-            # loop through all arguments
-            #---set param_result = test_param(), which determines whether to skip or process
-            #---if param_result == 0, process by sending param arg to processing function
+                if (param is not split_args[0]):
+                    HBNBCommand.handle_param(param, split_args[0], inst.id)
 
     def handle_param(param, cls_name, instance_id):
         if (param.count('=') != 1):
@@ -95,22 +91,8 @@ class HBNBCommand(cmd.Cmd):
         obj_dict = storage.all()
         obj_value = obj_dict[key]
 
-#        try:
-#            attr_type = type(getattr(obj_value, name))
-#            value = attr_type(value)
-#        except AttributeError:
-#            pass
-
         setattr(obj_value, name, value)
         obj_value.save()
-
-        #------skip if:
-        #----------unable to split param at '='symbol into name and value
-        #----------value is not int, float, or string
-        #----------if value isinstance(value, (int, float, str))
-        #----------name contains quote symbol before '=' symbol
-        #------if skip, return 1
-        #------if not skip, return 0
 
     def add_param():
         pass
