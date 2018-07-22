@@ -5,6 +5,7 @@
 import cmd
 import json
 import shlex
+import string
 from models.engine.file_storage import FileStorage
 from models.base_model import BaseModel
 from models.user import User
@@ -19,6 +20,9 @@ class HBNBCommand(cmd.Cmd):
     '''
         Contains the entry point of the command interpreter.
     '''
+
+    cls_names = ["BaseModel", "User", "State", "City",
+                 "Amenity", "Place", "Review"]
 
     prompt = ("(hbnb) ")
 
@@ -39,17 +43,77 @@ class HBNBCommand(cmd.Cmd):
             Create a new instance of class BaseModel and saves it
             to the JSON file.
         '''
-        if len(args) == 0:
+        if args == "":
             print("** class name missing **")
-            return
-        try:
-            args = shlex.split(args)
-            new_instance = eval(args[0])()
-            new_instance.save()
-            print(new_instance.id)
+        else:
+            acceptable_cls = 0
+            split_args = args.split()
+            for item in HBNBCommand.cls_names:
+                if item == split_args[0]:
+                    inst = eval(split_args[0])()
+                    inst.save()
+                    if len(split_args) < 2:
+                        print(inst.id)
+                    acceptable_cls = 1
+            if (acceptable_cls != 1):
+                print("** class doesn't exist **")
+                return
+            for param in split_args:
+               if (param is not split_args[0]):
+                   HBNBCommand.handle_param(param, split_args[0], inst.id)
+            # count arguments (use argc?)
+            # loop through all arguments
+            #---set param_result = test_param(), which determines whether to skip or process
+            #---if param_result == 0, process by sending param arg to processing function
 
-        except:
-            print("** class doesn't exist **")
+    def handle_param(param, cls_name, instance_id):
+        if (param.count('=') != 1):
+            return
+
+        name, eq, value = param.partition('=')
+
+        if "\"" in name:
+            return
+
+        if "\'" in name:
+            return
+
+        int_chars = set(string.digits)
+        flo_chars = set(string.digits + '.' + '-')
+
+        if (set(value) <= int_chars):
+            value = int(value)
+        elif ((set(value) <= flo_chars) and (value.count('.') == 1)):
+            value = float(value)
+        else:
+            value = value.replace("_", " ")
+            value = value[1:-1]
+
+        storage = FileStorage()
+        storage.reload()
+        key = cls_name + '.' + instance_id
+        obj_dict = storage.all()
+        obj_value = obj_dict[key]
+
+#        try:
+#            attr_type = type(getattr(obj_value, name))
+#            value = attr_type(value)
+#        except AttributeError:
+#            pass
+
+        setattr(obj_value, name, value)
+        obj_value.save()
+
+        #------skip if:
+        #----------unable to split param at '='symbol into name and value
+        #----------value is not int, float, or string
+        #----------if value isinstance(value, (int, float, str))
+        #----------name contains quote symbol before '=' symbol
+        #------if skip, return 1
+        #------if not skip, return 0
+
+    def add_param():
+        pass
 
     def do_show(self, args):
         '''
