@@ -57,8 +57,6 @@ class FileStorage:
     def delete(self, obj=None):
         ''' deletes obj from __objects if it exists '''
         key = str(obj.__class__.__name__) + "." + str(obj.id)
-        try:
+        if key in FileStorage.__objects:
             del FileStorage.__objects[key]
-            self.save()
-        except NameError:
-            pass
+        self.save()
