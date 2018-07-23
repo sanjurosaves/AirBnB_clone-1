@@ -61,4 +61,4 @@ class FileStorage:
         key = str(obj.__class__.__name__) + "." + str(obj.id)
         if key in FileStorage.__objects:
             del FileStorage.__objects[key]
-        self.save()
+
