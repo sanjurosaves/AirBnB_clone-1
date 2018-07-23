@@ -52,8 +52,7 @@ class HBNBCommand(cmd.Cmd):
                 if item == split_args[0]:
                     inst = eval(split_args[0])()
                     inst.save()
-                    if len(split_args) < 2:
-                        print(inst.id)
+                    print(inst.id)
                     acceptable_cls = 1
             if (acceptable_cls != 1):
                 print("** class doesn't exist **")
