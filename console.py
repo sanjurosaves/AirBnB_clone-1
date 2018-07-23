@@ -73,12 +73,14 @@ class HBNBCommand(cmd.Cmd):
         if "\'" in name:
             return
 
-        int_chars = set(string.digits)
+        int_chars = set(string.digits + '-')
         flo_chars = set(string.digits + '.' + '-')
 
-        if (set(value) <= int_chars):
+        if ((set(value) <= int_chars) and (value.count('-') < 2) and
+                                          (value.find('-') < 1)):
             value = int(value)
-        elif ((set(value) <= flo_chars) and (value.count('.') == 1)):
+        elif ((set(value) <= flo_chars) and (value.count('.') == 1)
+              and (value.count('-') < 2) and (value.find('-') < 1)):
             value = float(value)
         elif (value[0] == '"') and (value[-1] == '"'):
             value = value[1:-1]
