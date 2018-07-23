@@ -88,6 +88,7 @@ class HBNBCommand(cmd.Cmd):
                     return
             value = value.replace("_", " ")
             value = value.replace('\\"', '"')
+            value = value.replace('\\\\', '\\')
         else:
             return
 
