@@ -81,11 +81,7 @@ class HBNBCommand(cmd.Cmd):
             value = int(value)
         elif ((set(value) <= flo_chars) and (value.count('.') == 1)):
             value = float(value)
-        else:
-            if value[0] != '"':
-                return
-            if value[-1] != '"':
-                return
+        elif (value[0] == '"') and (value[-1] == '"'):
             value = value[1:-1]
             quote_pos = value.find('"')
             if quote_pos != -1:
@@ -93,7 +89,8 @@ class HBNBCommand(cmd.Cmd):
                     return
             value = value.replace("_", " ")
             value = value.replace('\\"', '"')
-
+        else:
+            return
 
         storage = FileStorage()
         storage.reload()
