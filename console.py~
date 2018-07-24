@@ -6,8 +6,8 @@ import cmd
 import json
 import shlex
 import string
-from models.engine.file_storage import FileStorage
 from models.engine.db_storage import DBStorage
+from models.engine.file_storage import FileStorage
 from models.base_model import BaseModel
 from models.user import User
 from models.place import Place
@@ -17,10 +17,6 @@ from models.amenity import Amenity
 from models.review import Review
 import os
 
-if os.getenv("HBNB_TYPE_STORAGE") == "db":
-    storage = DBStorage()
-else:
-    storage = FileStorage()
 
 class HBNBCommand(cmd.Cmd):
     '''
@@ -56,9 +52,12 @@ class HBNBCommand(cmd.Cmd):
             split_args = args.split()
             for item in HBNBCommand.cls_names:
                 if item == split_args[0]:
+                    print(item)
                     inst = eval(split_args[0])()
+                    print(inst)
                     inst.save()
-                    print(inst.id)
+                    if len(split_args) < 2:
+                        print(inst.id)
                     acceptable_cls = 1
             if (acceptable_cls != 1):
                 print("** class doesn't exist **")
@@ -79,27 +78,20 @@ class HBNBCommand(cmd.Cmd):
         if "\'" in name:
             return
 
-        int_chars = set(string.digits + '-')
+        int_chars = set(string.digits)
         flo_chars = set(string.digits + '.' + '-')
 
-        if ((set(value) <= int_chars) and (value.count('-') < 2) and
-                                          (value.find('-') < 1)):
+        if (set(value) <= int_chars):
             value = int(value)
-        elif ((set(value) <= flo_chars) and (value.count('.') == 1)
-              and (value.count('-') < 2) and (value.find('-') < 1)):
+        elif ((set(value) <= flo_chars) and (value.count('.') == 1)):
             value = float(value)
-        elif (value[0] == '"') and (value[-1] == '"'):
-            value = value[1:-1]
-            quote_pos = value.find('"')
-            if quote_pos != -1:
-                if value[quote_pos - 1] != '\\':
-                    return
-            value = value.replace("_", " ")
-            value = value.replace('\\"', '"')
-            value = value.replace('\\\\', '\\')
         else:
-            return
-
+            value = value.replace("_", " ")
+            value = value[1:-1]
+        if os.getenv("HBNB_TYPE_STORAGE") == "db":
+            storage = DBStorage()
+        else:
+            storage = FileStorage()
         storage.reload()
         key = cls_name + '.' + instance_id
         obj_dict = storage.all()
@@ -123,7 +115,10 @@ class HBNBCommand(cmd.Cmd):
         if len(args) == 1:
             print("** instance id missing **")
             return
-
+        if os.getenv("HBNB_TYPE_STORAGE") == "db":
+            storage = DBStorage()
+        else:
+            storage = FileStorage()
         storage.reload()
         obj_dict = storage.all()
         try:
@@ -152,7 +147,10 @@ class HBNBCommand(cmd.Cmd):
             return
         class_name = args[0]
         class_id = args[1]
-
+        if os.getenv("HBNB_TYPE_STORAGE") == "db":
+            storage = DBStorage()
+        else:
+            storage = FileStorage()
         storage.reload()
         obj_dict = storage.all()
         try:
@@ -173,7 +171,10 @@ class HBNBCommand(cmd.Cmd):
             based or not on the class name.
         '''
         obj_list = []
-
+        if os.getenv("HBNB_TYPE_STORAGE") == "db":
+            storage = DBStorage()
+        else:
+            storage = FileStorage()
         storage.reload()
         objects = storage.all()
         try:
@@ -196,7 +197,10 @@ class HBNBCommand(cmd.Cmd):
             Update an instance based on the class name and id
             sent as args.
         '''
-
+        if os.getenv("HBNB_TYPE_STORAGE") == "db":
+            storage = DBStorage()
+        else:
+            storage = FileStorage()
         storage.reload()
         args = shlex.split(args)
         if len(args) == 0:
@@ -242,7 +246,7 @@ class HBNBCommand(cmd.Cmd):
             Counts/retrieves the number of instances.
         '''
         obj_list = []
-
+        storage = FileStorage()
         storage.reload()
         objects = storage.all()
         try:
