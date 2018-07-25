@@ -6,6 +6,7 @@ from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String
 import os
 
+
 class User(BaseModel, Base):
     '''
         Definition of the User class
