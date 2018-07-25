@@ -20,7 +20,7 @@ classes = {"User": User, "BaseModel": BaseModel,
            "Review": Review}
 
 temp_cls = {"State": State,
-            "City": City, "User": User}
+            "City": City, "User": User, "Place": Place, "Review": Review}
 if os.getenv("HBNB_TYPE_STORAGE") == "db":
     storage = DBStorage()
 else:
