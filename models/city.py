@@ -8,6 +8,7 @@ from sqlalchemy import Column, String, ForeignKey
 from sqlalchemy.orm import relationship
 import os
 
+
 class City(BaseModel, Base):
     '''
         Define the class City that inherits from BaseModel.
