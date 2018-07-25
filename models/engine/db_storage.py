@@ -5,6 +5,12 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session
 from sqlalchemy.orm import sessionmaker
 from models.base_model import BaseModel, Base
+from models.city import City
+from models.place import Place
+from models.review import Review
+from models.state import State
+from models.user import User
+import models
 import os
 
 user=os.getenv("HBNB_MYSQL_USER")
@@ -14,6 +20,7 @@ database=os.getenv("HBNB_MYSQL_DB")
 
 __engine = None
 __session = None
+
 
 class DBStorage:
     """engine class"""
@@ -27,23 +34,22 @@ class DBStorage:
         """"""
         db_dict = {}
         if cls:
-            print("Hello")
-            for key, value in classes.items():
-                if key == cls.__name__:
-                    for item in self.__session.query(cls.__name__).all():
+#            print("Hello")
+            if cls.__name__ in temp_cls:
+                for item in self.__session.query(cls).all():
                         key = "{}.{}".format(cls.__name__, item.id)
                         db_dict[key] = item
         else:
-            print("to more")
-            for k, value in classes.items():
+#            print("to more")
+            for k, value in models.temp_cls.items():
                 for item in self.__session.query(value).all():
                     key = "{}.{}".format(k, item.id)
                     db_dict[key] = item
+        return db_dict
     def new(self, obj):
         """'"""
         if obj:
             self.__session.add(obj)
-            self.__session.commit()
 
     def save(self):
         """"""
@@ -53,7 +59,7 @@ class DBStorage:
         """"""
         if obj:
             self.__session.delete(obj)
-            self.__session.commit()
+
 
     def reload(self):
         """"""

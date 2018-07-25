@@ -17,6 +17,8 @@ class FileStorage:
         '''
             Return the dictionary
         '''
+        db_dict = {}
+
         return self.__objects
 
     def new(self, obj):
@@ -56,7 +58,7 @@ class FileStorage:
 
     def delete(self, obj=None):
         '''
-        deletes obj from __objects if it exists
+        deletes obj from __objects if it exists 
         '''
         if obj:
             key = str(obj.__class__.__name__) + "." + str(obj.id)

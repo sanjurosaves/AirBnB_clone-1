@@ -15,16 +15,13 @@ from models.state import State
 from models.city import City
 from models.amenity import Amenity
 from models.review import Review
+from models import storage
 import os
 
-if os.getenv("HBNB_TYPE_STORAGE") == "db":
-    storage = DBStorage()
-else:
-    storage = FileStorage()
 
 class HBNBCommand(cmd.Cmd):
     '''
-        Contains the entry point of the command interpreter.
+    Contains the entry point of the command interpreter.
     '''
 
     cls_names = ["BaseModel", "User", "State", "City",
@@ -53,61 +50,26 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
         else:
             acceptable_cls = 0
-            split_args = args.split()
+            split_args = shlex.split(args)
             for item in HBNBCommand.cls_names:
                 if item == split_args[0]:
                     inst = eval(split_args[0])()
-                    inst.save()
-                    print(inst.id)
                     acceptable_cls = 1
             if (acceptable_cls != 1):
                 print("** class doesn't exist **")
                 return
-            for param in split_args:
-                if (param is not split_args[0]):
-                    HBNBCommand.handle_param(param, split_args[0], inst.id)
-
-    def handle_param(param, cls_name, instance_id):
-        if (param.count('=') != 1):
-            return
-
-        name, eq, value = param.partition('=')
-
-        if "\"" in name:
-            return
-
-        if "\'" in name:
-            return
-
-        int_chars = set(string.digits + '-')
-        flo_chars = set(string.digits + '.' + '-')
-
-        if ((set(value) <= int_chars) and (value.count('-') < 2) and
-                                          (value.find('-') < 1)):
-            value = int(value)
-        elif ((set(value) <= flo_chars) and (value.count('.') == 1)
-              and (value.count('-') < 2) and (value.find('-') < 1)):
-            value = float(value)
-        elif (value[0] == '"') and (value[-1] == '"'):
-            value = value[1:-1]
-            quote_pos = value.find('"')
-            if quote_pos != -1:
-                if value[quote_pos - 1] != '\\':
-                    return
-            value = value.replace("_", " ")
-            value = value.replace('\\"', '"')
-            value = value.replace('\\\\', '\\')
-        else:
-            return
-
-        storage.reload()
-        key = cls_name + '.' + instance_id
-        obj_dict = storage.all()
-        obj_value = obj_dict[key]
-
-        setattr(obj_value, name, value)
-        obj_value.save()
-
+            for param in split_args[1:]:
+                    name, _, value = param.partition('=')
+                    value = value.replace("_", " ")
+                    if hasattr(inst, name) is True:
+                       
+                        try:
+                            value = literal_eval(value)
+                        except:
+                            pass
+                        setattr(inst, name, value)
+            inst.save()
+            print(inst.id)
     def add_param():
         pass
 
@@ -124,7 +86,6 @@ class HBNBCommand(cmd.Cmd):
             print("** instance id missing **")
             return
 
-        storage.reload()
         obj_dict = storage.all()
         try:
             eval(args[0])
@@ -152,8 +113,6 @@ class HBNBCommand(cmd.Cmd):
             return
         class_name = args[0]
         class_id = args[1]
-
-        storage.reload()
         obj_dict = storage.all()
         try:
             eval(class_name)
@@ -173,8 +132,6 @@ class HBNBCommand(cmd.Cmd):
             based or not on the class name.
         '''
         obj_list = []
-
-        storage.reload()
         objects = storage.all()
         try:
             if len(args) != 0:
@@ -182,12 +139,13 @@ class HBNBCommand(cmd.Cmd):
         except NameError:
             print("** class doesn't exist **")
             return
-        for key, val in objects.items():
-            if len(args) != 0:
-                if type(val) is eval(args):
+        if objects:
+            for key, val in objects.items():
+                if len(args) != 0:
+                    if type(val) is eval(args):
+                        obj_list.append(val)
+                else:
                     obj_list.append(val)
-            else:
-                obj_list.append(val)
 
         print(obj_list)
 
@@ -243,7 +201,7 @@ class HBNBCommand(cmd.Cmd):
         '''
         obj_list = []
 
-        storage.reload()
+#        storage.reload()
         objects = storage.all()
         try:
             if len(args) != 0:
