@@ -17,6 +17,7 @@ import os
 import unittest
 
 
+@unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') != 'db', "testing db storage")
 class test_DBStorage(unittest.TestCase):
 
     def testCity(self):
