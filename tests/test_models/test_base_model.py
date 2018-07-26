@@ -9,6 +9,7 @@ from models.base_model import BaseModel
 from io import StringIO
 import sys
 import datetime
+import os
 
 
 class TestBase(unittest.TestCase):
@@ -154,3 +155,29 @@ class TestBase(unittest.TestCase):
         my_model_dict = self.my_model.to_dict()
         new_model = BaseModel(my_model_dict)
         self.assertNotEqual(self.my_model, new_model)
+
+    @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db', "skip unless db")
+    def test_to_dict(self):
+        """checking classes of the dict"""
+
+        my_model = BaseModel()
+        my_model_json = my_model.to_dict()
+        self.assertIsInstance(my_model_json['created_at'], str)
+        self.assertIsInstance(my_model_json['updated_at'], str)
+        self.assertEqual(my_model.__class__.__name__, 'BaseModel')
+
+    def test_save(self):
+        """check if it saves changes"""
+
+        my_model = BaseModel()
+        my_model.save()
+        self.assertNotEqual(my_model.created_at, my_model.updated_at)
+
+    def test_hasattribute(self):
+        """check attributes of BaseModel
+        """
+        my_model = BaseModel()
+        self.assertTrue(hasattr(my_model, "__init__"))
+        self.assertTrue(hasattr(my_model, "created_at"))
+        self.assertTrue(hasattr(my_model, "updated_at"))
+        self.assertTrue(hasattr(my_model, "id"))

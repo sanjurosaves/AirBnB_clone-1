@@ -3,8 +3,9 @@
     Contain tests for the state module.
 '''
 import unittest
-from models.base_model import BaseModel
+from models.base_model import BaseModel, Base
 from models.state import State
+import os
 
 
 class TestState(unittest.TestCase):
@@ -33,3 +34,11 @@ class TestState(unittest.TestCase):
         new_state = State()
         name = getattr(new_state, "name")
         self.assertIsInstance(name, str)
+
+    @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db', "skip unless db")
+    def test__Stateinheritence2(self):
+        '''
+            tests that the State class Inherits from BaseModel
+        '''
+        new_state = State()
+        self.assertIsInstance(new_state, Base)

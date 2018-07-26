@@ -5,8 +5,9 @@
 '''
 
 import unittest
-from models.base_model import BaseModel
+from models.base_model import BaseModel, Base
 from models.place import Place
+import os
 
 
 class TestUser(unittest.TestCase):
@@ -121,3 +122,11 @@ class TestUser(unittest.TestCase):
         '''
         city_id = getattr(self.new_place, "city_id")
         self.assertIsInstance(city_id, str)
+
+    @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db', "skip unless db")
+    def test_Place_inheritence2(self):
+        '''
+            tests that the Place class Inherits from BaseModel
+        '''
+        new_place = Place()
+        self.assertIsInstance(new_place, Base)

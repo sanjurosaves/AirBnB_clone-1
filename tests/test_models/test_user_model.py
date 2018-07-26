@@ -5,11 +5,12 @@
 '''
 
 import unittest
-from models.base_model import BaseModel
+from models.base_model import BaseModel, Base
 from models.user import User
 from io import StringIO
 import sys
 import datetime
+import os
 
 
 class TestUser(unittest.TestCase):
@@ -66,3 +67,11 @@ class TestUser(unittest.TestCase):
         new = User()
         name = getattr(new, "password")
         self.assertIsInstance(name, str)
+
+    @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db', "skip unless db")
+    def test_user_inheritence2(self):
+        '''
+            tests that the User class Inherits from BaseModel
+        '''
+        new_user = User()
+        self.assertIsInstance(new_user, Base)

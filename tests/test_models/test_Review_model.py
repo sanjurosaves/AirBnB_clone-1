@@ -5,8 +5,9 @@
 '''
 
 import unittest
-from models.base_model import BaseModel
+from models.base_model import BaseModel, Base
 from models.review import Review
+import os
 
 
 class TestReview(unittest.TestCase):
@@ -43,3 +44,11 @@ class TestReview(unittest.TestCase):
         self.assertIsInstance(place_id, str)
         self.assertIsInstance(user_id, str)
         self.assertIsInstance(text, str)
+
+    @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db', "skip unless db")
+    def test_Review_inheritence2(self):
+        '''
+            tests that the Review class Inherits from BaseModel
+        '''
+        new_review = Review()
+        self.assertIsInstance(new_review, Base)

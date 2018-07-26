@@ -5,8 +5,9 @@
 '''
 
 import unittest
-from models.base_model import BaseModel
+from models.base_model import BaseModel, Base
 from models.amenity import Amenity
+import os
 
 
 class TestAmenity(unittest.TestCase):
@@ -35,3 +36,11 @@ class TestAmenity(unittest.TestCase):
         new_amenity = Amenity()
         name_value = getattr(new_amenity, "name")
         self.assertIsInstance(name_value, str)
+
+    @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db', "skip unless db")
+    def test_Amenity_inheritence2(self):
+        '''
+            tests that the Amenity class Inherits from BaseModel
+        '''
+        new_amenity = Amenity()
+        self.assertIsInstance(new_amenity, Base)
