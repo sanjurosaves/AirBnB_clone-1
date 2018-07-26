@@ -7,15 +7,14 @@ from sqlalchemy import Column, String, ForeignKey, Integer, Float, Table
 from sqlalchemy.orm import relationship
 import os
 
-if os.getenv("HBNB_TYPE_STORAGE") == 'db':
-    metadata = Base.metadata
-    place_amenity = Table("place_amenity", metadata,
-                          Column("place_id", String(60),
-                                 ForeignKey('places.id'), nullable=False,
-                                 primary_key=True),
-                          Column("amenity_id", String(60),
-                                 ForeignKey('amenities.id'), nullable=False,
-                                 primary_key=True))
+metadata = Base.metadata
+place_amenity = Table("place_amenity", metadata,
+                      Column("place_id", String(60),
+                             ForeignKey('places.id'), nullable=False,
+                             primary_key=True),
+                      Column("amenity_id", String(60),
+                             ForeignKey('amenities.id'), nullable=False,
+                             primary_key=True))
 
 
 class Place(BaseModel, Base):
