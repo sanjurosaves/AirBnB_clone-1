@@ -62,7 +62,6 @@ class HBNBCommand(cmd.Cmd):
                     name, _, value = param.partition('=')
                     value = value.replace("_", " ")
                     if hasattr(inst, name) is True:
-                       
                         try:
                             value = literal_eval(value)
                         except:
@@ -70,6 +69,7 @@ class HBNBCommand(cmd.Cmd):
                         setattr(inst, name, value)
             inst.save()
             print(inst.id)
+
     def add_param():
         pass
 
