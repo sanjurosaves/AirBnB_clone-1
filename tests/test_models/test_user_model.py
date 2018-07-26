@@ -42,7 +42,8 @@ class TestUser(unittest.TestCase):
         '''
         new = User()
         name = getattr(new, "email")
-        self.assertIsInstance(name, str)
+        if name is not None:
+            self.assertIsInstance(name, str)
 
     def test_type_first_name(self):
         '''
@@ -50,7 +51,8 @@ class TestUser(unittest.TestCase):
         '''
         new = User()
         name = getattr(new, "first_name")
-        self.assertIsInstance(name, str)
+        if name is not None:
+            self.assertIsInstance(name, str)
 
     def test_type_last_name(self):
         '''
@@ -58,7 +60,8 @@ class TestUser(unittest.TestCase):
         '''
         new = User()
         name = getattr(new, "last_name")
-        self.assertIsInstance(name, str)
+        if name is not None:
+            self.assertIsInstance(name, str)
 
     def test_type_password(self):
         '''
@@ -66,7 +69,8 @@ class TestUser(unittest.TestCase):
         '''
         new = User()
         name = getattr(new, "password")
-        self.assertIsInstance(name, str)
+        if name is not None:
+            self.assertIsInstance(name, str)
 
     @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db', "skip unless db")
     def test_user_inheritence2(self):

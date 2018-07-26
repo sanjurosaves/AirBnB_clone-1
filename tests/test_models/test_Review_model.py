@@ -41,9 +41,12 @@ class TestReview(unittest.TestCase):
         place_id = getattr(new_review, "place_id")
         user_id = getattr(new_review, "user_id")
         text = getattr(new_review, "text")
-        self.assertIsInstance(place_id, str)
-        self.assertIsInstance(user_id, str)
-        self.assertIsInstance(text, str)
+        if place_id:
+            self.assertIsInstance(place_id, str)
+        if user_id:
+            self.assertIsInstance(user_id, str)
+        if text:
+            self.assertIsInstance(text, str)
 
     @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db', "skip unless db")
     def test_Review_inheritence2(self):
