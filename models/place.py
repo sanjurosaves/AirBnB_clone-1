@@ -3,18 +3,20 @@
     Define the class Place.
 '''
 from models.base_model import BaseModel, Base
-from sqlalchemy import Column, String, ForeignKey, Integer, Float
+from sqlalchemy import Column, String, ForeignKey, Integer, Float, Table
 from sqlalchemy.orm import relationship
 import os
 
+if os.getenv("HBNB_TYPE_STORAGE") == 'db':
+    metadata = Base.metadata
+    place_amenity = Table("place_amenity", metadata,
+                          Column("place_id", String(60),
+                                 ForeignKey('places.id'), nullable=False,
+                                 primary_key=True),
+                          Column("amenity_id", String(60),
+                                 ForeignKey('amenities.id'), nullable=False,
+                                 primary_key=True))
 
-place_amenity = Table("place_amenity", metadata=Base.metadata,
-                      Column("place_id", String(60),
-                             ForeignKey('places.id'), nullable=False,
-                             PrimaryKey=True),
-                      Column("amenity_id", String(60),
-                             ForeignKey('amenities.id'), nullable=False,
-                             PrimaryKey=True))
 
 class Place(BaseModel, Base):
     '''
@@ -65,12 +67,14 @@ class Place(BaseModel, Base):
         def amenities(self):
             """establishes many to many relationship b/w ... """
             list_amenities = []
-            for instance in self.amenities:
-                for le_id in amenity_ids:
-                    if instance.id == le_id:
-                        list_amenities.append(le_id)
+            for le_id in amenity_ids:
+                key = 'Amenity.' + str(le_id)
+                if FileStorage.__objects[key]:
+                    list_amenities.append(FileStorage.__objects[key])
             return list_amenities
 
         @amenities.setter
         def amenities(self, value):
-            
+            """ setter to add Amenity.id to amenity_ids """
+            if isinstance(value, Amenity):
+                ameninty_ids.append(value.id)
