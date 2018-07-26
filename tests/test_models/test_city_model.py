@@ -41,7 +41,8 @@ class TestUser(unittest.TestCase):
         '''
         new_city = City()
         name = getattr(new_city, "state_id")
-        self.assertIsInstance(name, str)
+        if name:
+            self.assertIsInstance(name, str)
 
     @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db', "skip unless db")
     def test_City_inheritence2(self):

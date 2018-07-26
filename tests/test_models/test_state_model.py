@@ -33,7 +33,8 @@ class TestState(unittest.TestCase):
         '''
         new_state = State()
         name = getattr(new_state, "name")
-        self.assertIsInstance(name, str)
+        if name:
+            self.assertIsInstance(name, str)
 
     @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db', "skip unless db")
     def test__Stateinheritence2(self):

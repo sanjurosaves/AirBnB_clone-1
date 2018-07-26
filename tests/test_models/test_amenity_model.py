@@ -35,7 +35,8 @@ class TestAmenity(unittest.TestCase):
         '''
         new_amenity = Amenity()
         name_value = getattr(new_amenity, "name")
-        self.assertIsInstance(name_value, str)
+        if name_value:
+            self.assertIsInstance(name_value, str)
 
     @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db', "skip unless db")
     def test_Amenity_inheritence2(self):
