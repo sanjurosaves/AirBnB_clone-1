@@ -2,11 +2,20 @@
 '''
     Implementation of the Amenity class
 '''
-from models.base_model import BaseModel
+from models.base_model import BaseModel, Base
+from models.base import place_amenities
+from sqlalchemy import Column, String, ForeignKey
+from sqlalchemy.orm import relationship
+import os
 
 
-class Amenity(BaseModel):
+class Amenity(BaseModel, Base):
     '''
         Implementation for the Amenities.
     '''
-    name = ""
+    __tablename__ = 'amenities'
+    if os.getenv("HBNB_TYPE_STORAGE") == "db":
+        name = Column(String(128), nullable=False)
+        place_amenities = relationship("Place", secondary=place_amenity)
+    else:
+        name = ""

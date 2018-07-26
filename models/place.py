@@ -8,6 +8,14 @@ from sqlalchemy.orm import relationship
 import os
 
 
+place_amenity = Table("place_amenity", metadata=Base.metadata,
+                      Column("place_id", String(60),
+                             ForeignKey('places.id'), nullable=False,
+                             PrimaryKey=True),
+                      Column("amenity_id", String(60),
+                             ForeignKey('amenities.id'), nullable=False,
+                             PrimaryKey=True))
+
 class Place(BaseModel, Base):
     '''
         Define the class Place that inherits from BaseModel.
@@ -28,6 +36,8 @@ class Place(BaseModel, Base):
             'Review',
             cascade='all, delete-orphan',
             backref='place')
+        amenities = relationship('Amenity', secondary=place_amenity,
+                                 viewonly=False)
 
     else:
         city_id = ""
@@ -50,3 +60,17 @@ class Place(BaseModel, Base):
                 if item.place_id == self.id:
                     list_reviews.append(item)
             return list_reviews
+
+        @property
+        def amenities(self):
+            """establishes many to many relationship b/w ... """
+            list_amenities = []
+            for instance in self.amenities:
+                for le_id in amenity_ids:
+                    if instance.id == le_id:
+                        list_amenities.append(le_id)
+            return list_amenities
+
+        @amenities.setter
+        def amenities(self, value):
+            
