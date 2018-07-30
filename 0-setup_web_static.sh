@@ -6,7 +6,7 @@ apt-get -y update
 apt-get -y install nginx
 #fi
 mkdir -p /data/web_static/shared/ /data/web_static/releases/test/
-echo "good luck!" > /data/web_static/releases/test/index.html
+echo -e '<html>\n  <head>\n  </head>\n  <body>\n   Holberton School\n  </body>\n</html>' > /data/web_static/releases/test/index.html
 ln -f -s /data/web_static/releases/test/ /data/web_static/current
 chown -R ubuntu:ubuntu /data/
 sed -i '38i location /hbnb_static { alias /data/web_static/current/; }' /etc/nginx/sites-enabled/default
