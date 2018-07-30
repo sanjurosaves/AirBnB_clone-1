@@ -8,6 +8,7 @@ from fabric.api import sudo
 from fabric.context_managers import cd
 from fabric.api import env
 from datetime import datetime
+import os
 
 env.hosts = ['35.237.92.195', '35.237.197.1']
 
@@ -25,28 +26,28 @@ def do_pack():
 
 
 def do_deploy(archive_path):
-    if archive_path is None:
+    if os.path.esists(archive_path) is False:
         return False
     try:
         # upload archive (put) to tmp dir of webserver
         put(archive_path, '/tmp/')
         # uncompress
         archive_name = archive_path[9:-4]
-        sudo('mkdir -p /data/web_static/releases/{}'.format(archive_name))
-        sudo('tar -xzf /tmp/{}.tgz -C '
+        run('sudo mkdir -p /data/web_static/releases/{}'.format(archive_name))
+        run('sudo tar -xzf /tmp/{}.tgz -C '
              '/data/web_static/releases/{}'
              .format(archive_name, archive_name))
         # delete archive
         run('rm /tmp/{}.tgz'.format(archive_name))
-        sudo('mv -f /data/web_static/releases/{}/web_static/* '
+        run('sudo mv -f /data/web_static/releases/{}/web_static/* '
              '/data/web_static/releases/{}/'.format(archive_name,
                                                     archive_name))
-        sudo('rm -rf /data/web_static/releases/{}/web_static'
+        run('sudo rm -rf /data/web_static/releases/{}/web_static'
              .format(archive_name))
         # delete symbolic link
-        sudo('rm -rf /data/web_static/current')
+        run('sudo rm -rf /data/web_static/current')
         # create new symbolic link
-        sudo('ln -s /data/web_static/releases/{}/ /data/web_static/current'.
+        run('sudo ln -s /data/web_static/releases/{}/ /data/web_static/current'.
              format(archive_name))
         print("New version deployed!")
         return True
