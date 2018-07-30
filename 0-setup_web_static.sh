@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # configures a new Ubuntu machine with installed nginx web server
-if ! which nginx > /dev/null 2>&1;
-then
-    apt-get -y update
-    apt-get -y install nginx
-fi
+#if ! which nginx > /dev/null 2>&1;
+#then
+apt-get -y update
+apt-get -y install nginx
+#fi
 mkdir -p /data/web_static/shared/ /data/web_static/releases/test/
 echo "good luck!" > /data/web_static/releases/test/index.html
 ln -f -s /data/web_static/releases/test/ /data/web_static/current
