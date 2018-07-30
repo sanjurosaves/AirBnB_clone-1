@@ -15,7 +15,7 @@ def do_pack():
     try:
         dt = datetime.now().strftime("%Y%m%d%H%M%S")
         local("mkdir -p versions; tar -P -cvzf versions/web_static_{}.tgz "
-              "/data/web_static/".format(dt))
+              "/web_static/".format(dt))
         ap = "versions/web_static_{}.tgz".format(dt)
         return ap
     except:
