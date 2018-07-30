@@ -29,8 +29,8 @@ def do_deploy(archive_path):
         # upload archive (put) to tmp dir of webserver
         put(archive_path, '/tmp/')
         # uncompress
-        archive_name = archive_path[-9:-4]
-        print(archive_path)
+        archive_name = archive_path[9:-4]
+        print(archive_name)
         run('mkdir -p /data/web_static/releases/{}'.format(archive_name))
         run('tar -xzf /tmp/{}.tgz -C '
             '/data/web_static/releases/{}'
