@@ -35,20 +35,20 @@ def do_deploy(archive_path):
         archive_name = archive_path[9:-4]
         run('sudo mkdir -p /data/web_static/releases/{}'.format(archive_name))
         run('sudo tar -xzf /tmp/{}.tgz -C '
-             '/data/web_static/releases/{}'
-             .format(archive_name, archive_name))
+            '/data/web_static/releases/{}'
+            .format(archive_name, archive_name))
         # delete archive
         run('rm /tmp/{}.tgz'.format(archive_name))
         run('sudo mv -f /data/web_static/releases/{}/web_static/* '
-             '/data/web_static/releases/{}/'.format(archive_name,
-                                                    archive_name))
+            '/data/web_static/releases/{}/'.format(archive_name,
+                                                   archive_name))
         run('sudo rm -rf /data/web_static/releases/{}/web_static'
-             .format(archive_name))
+            .format(archive_name))
         # delete symbolic link
         run('sudo rm -rf /data/web_static/current')
         # create new symbolic link
-        run('sudo ln -s /data/web_static/releases/{}/ /data/web_static/current'.
-             format(archive_name))
+        run('sudo ln -s /data/web_static/releases/{}/ /data/web_static/current'
+            .format(archive_name))
         print("New version deployed!")
         return True
     except:
