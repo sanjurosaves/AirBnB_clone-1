@@ -26,7 +26,7 @@ def do_pack():
 
 
 def do_deploy(archive_path):
-    if os.path.esists(archive_path) is False:
+    if os.path.exists(archive_path) is False:
         return False
     try:
         # upload archive (put) to tmp dir of webserver
