@@ -26,10 +26,9 @@ def pthon(text='is_cool'):
     return 'Python {}'.format(text.replace('_', ' '))
 
 
-@app.route('/number/<number>')
+@app.route('/number/<int:number>')
 def number(number):
-    if isinstance(number, int):
-        return '{} is a number'.format(number)
+    return '{} is a number'.format(number)
 
 
 if __name__ == "__main__":
