@@ -20,9 +20,9 @@ def c(text):
     return 'C {}'.format(text.replace('_', ' '))
 
 @app.route('/python/<text>')
-def c(text="is_cool"):
+def python(text=is_cool):
     app.strict_slashes=False
-    return 'C {}'.format(text.replace('_', ' '))
+    return 'Python {}'.format(text.replace('_', ' '))
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000)
