@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def hello_hbnb():
-    app.strict_slashes=False
+    app.strict_slashes = False
     return 'Hello HBNB!'
 
 if __name__ == "__main__":
