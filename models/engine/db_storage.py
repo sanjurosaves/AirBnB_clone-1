@@ -48,9 +48,10 @@ class DBStorage:
                     db_dict[key] = item
         else:
             for k, value in models.temp_cls.items():
-                for item in self.__session.query(value).all():
-                    key = "{}.{}".format(k, item.id)
-                    db_dict[key] = item
+                if k != "BaseModel":
+                    for item in self.__session.query(value).all():
+                        key = "{}.{}".format(k, item.id)
+                        db_dict[key] = item
         return db_dict
 
     def new(self, obj):
