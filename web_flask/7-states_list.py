@@ -6,11 +6,10 @@ app = Flask(__name__)
 app.url_map.strict_slashes = False
 
 
-dict = storage.all()
-
 @app.route('/states_list')
-def states_list(states):
-    return render_template('7-states_list.html', states=states)
+def states_list():
+    dic = storage.all("State")
+    return render_template('7-states_list.html', dic=dic)
 
 
 if __name__ == "__main__":
