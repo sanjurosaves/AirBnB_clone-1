@@ -17,9 +17,14 @@ class FileStorage:
         '''
             Return the dictionary
         '''
-        db_dict = {}
-
-        return self.__objects
+        if cls is not None:
+            clsobjects = {}
+            for key, value in self.__objects.items():
+                if isinstance(value, cls):
+                    clsobjects[key] = value
+            return clsobjects
+        else:
+            return self.__objects
 
     def new(self, obj):
         '''
@@ -55,6 +60,10 @@ class FileStorage:
                 FileStorage.__objects[key] = class_name(**val)
         except FileNotFoundError:
             pass
+
+    def close(self):
+        ''' calls reload method '''
+        self.reload()
 
     def delete(self, obj=None):
         '''

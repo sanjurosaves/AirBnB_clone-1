@@ -41,14 +41,12 @@ class DBStorage:
     def all(self, cls=None):
         """"""
         db_dict = {}
-        if cls:
-            #            print("Hello")
-            if cls.__name__ in temp_cls:
-                for item in self.__session.query(cls).all():
-                    key = "{}.{}".format(cls.__name__, item.id)
+        if cls is not None:
+            if cls in temp_cls:
+                for item in self.__session.query(models.classes[cls]).all():
+                    key = "{}.{}".format(item.__class__.__name__, item.id)
                     db_dict[key] = item
         else:
-            #            print("to more")
             for k, value in models.temp_cls.items():
                 for item in self.__session.query(value).all():
                     key = "{}.{}".format(k, item.id)
@@ -75,3 +73,7 @@ class DBStorage:
             bind=self.__engine, expire_on_commit=False)
         Session = scoped_session(session_factory)
         self.__session = Session()
+
+    def close(self):
+        """ calls close method on the class Session """
+        self.__session.close()
