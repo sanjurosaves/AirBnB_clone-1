@@ -12,6 +12,8 @@ app.url_map.strict_slashes = False
 def list_states():
     dic = storage.all("State")
     lis = []
+    for key, val in dic.items():
+        lis.append(val)
     return render_template('9-states.html', lis=lis)
 
 
