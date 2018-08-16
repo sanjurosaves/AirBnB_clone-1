@@ -4,7 +4,7 @@
     <TITLE>HBNB</TITLE>
   </HEAD>
   <BODY>
-    {% if id in lis_id %}
+    {% if id in id_lis %}
     {% for state in lis if state.id == id %}
     <H1>State: {{ state.name }}</H1>
     <H3>Cities:</H3>
